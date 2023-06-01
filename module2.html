@@ -4,8 +4,29 @@
 <head>
   <meta charset="UTF-8">
   <title>Check Off Shopping List</title>
-  <script>
-    angular.module('ShoppingListApp', [])
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.2/angular.min.js"></script>
+
+</head>
+
+<body ng-controller="ShoppingListController as shoppingList">
+  <h2>To Buy:</h2>
+  <ul>
+    <li ng-repeat="item in shoppingList.toBuyItems">
+      Buy {{item.quantity}} {{item.name}}
+      <button ng-click="shoppingList.buyItem($index)">Bought</button>
+    </li>
+  </ul>
+
+  <h2>Already Bought:</h2>
+  <ul>
+    <li ng-if="shoppingList.alreadyBoughtItems.length === 0">Nothing bought yet.</li>
+    <li ng-repeat="item in shoppingList.alreadyBoughtItems">Bought {{item.quantity}} {{item.name}}</li>
+  </ul>
+
+  <p ng-if="shoppingList.toBuyItems.length === 0">Everything is bought!</p>
+</body>
+<script>
+  angular.module('ShoppingListApp', [])
   .controller('ShoppingListController', ShoppingListController);
 
 ShoppingListController.$inject = [];
@@ -29,26 +50,5 @@ function ShoppingListController() {
     shoppingList.alreadyBoughtItems.push(boughtItem);
   };
 }
-
-  </script>
-</head>
-
-<body ng-controller="ShoppingListController as shoppingList">
-  <h2>To Buy:</h2>
-  <ul>
-    <li ng-repeat="item in shoppingList.toBuyItems">
-      Buy {{item.quantity}} {{item.name}}
-      <button ng-click="shoppingList.buyItem($index)">Bought</button>
-    </li>
-  </ul>
-
-  <h2>Already Bought:</h2>
-  <ul>
-    <li ng-if="shoppingList.alreadyBoughtItems.length === 0">Nothing bought yet.</li>
-    <li ng-repeat="item in shoppingList.alreadyBoughtItems">Bought {{item.quantity}} {{item.name}}</li>
-  </ul>
-
-  <p ng-if="shoppingList.toBuyItems.length === 0">Everything is bought!</p>
-</body>
-
+</script>
 </html>
