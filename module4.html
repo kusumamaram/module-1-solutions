@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="restaurantApp">
+<head>
+    <meta charset="UTF-8">
+    <title>Restaurant Menu</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script>
+        var app = angular.module('restaurantApp', []);
+        <!-- Inside <script> tag -->
+app.controller('HomeController', function ($scope) {
+    // No data retrieval needed for home view
+});
+
+app.controller('CategoriesController', function ($scope, $http) {
+    $http.get('REST_API_URL/categories')
+        .then(function (response) {
+            $scope.categories = response.data;
+        });
+});
+
+app.controller('ItemsController', function ($scope, $http, $routeParams) {
+    var categoryId = $routeParams.categoryId;
+    $http.get('REST_API_URL/items?category=' + categoryId)
+        .then(function (response) {
+            $scope.items = response.data;
+        });
+});
+   app.config(function ($routeProvider) {
+       $routeProvider
+           .when('/', {
+               templateUrl: 'home.html',
+               controller: 'HomeController'
+           })
+           .when('/categories', {
+               templateUrl: 'categories.html',
+               controller: 'CategoriesController'
+           })
+           .when('/items/:categoryId', {
+               templateUrl: 'items.html',
+               controller: 'ItemsController'
+           })
+           .otherwise({
+               redirectTo: '/'
+           });
+   });
+
+    </script>
+</head>
+<body>
+  <!-- Inside <body> -->
+<div ng-controller="HomeController">
+    <h1>Welcome to our Restaurant</h1>
+    <a href="#/categories">View Menu Categories</a>
+</div>
+<!-- Inside <body> -->
+<div ng-controller="CategoriesController">
+    <h1>Menu Categories</h1>
+    <ul>
+        <li ng-repeat="category in categories">
+            <a ng-href="#/items/{{category.id}}">{{category.name}}</a>
+        </li>
+    </ul>
+</div>
+<!-- Inside <body> -->
+<div ng-controller="ItemsController">
+    <h1>Menu Items - {{selectedCategory.name}}</h1>
+    <ul>
+        <li ng-repeat="item in items">
+            {{item.name}} - {{item.price}}
+        </li>
+    </ul>
+</div>
+
+</body>
+</html>
