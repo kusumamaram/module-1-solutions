@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="restaurantApp">
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+
+  <script>
+    (function () {
+  'use strict';
+
+  angular.module('RestaurantApp')
+    .controller('SignUpController', SignUpController);
+
+  SignUpController.$inject = ['$http'];
+  function SignUpController($http) {
+    var signup = this;
+    signup.invalidMenuNumber = false;
+    signup.saved = false;
+
+    signup.submit = function () {
+      var menuNumber = signup.favoriteMenu.toUpperCase();
+      var categoryShortName = menuNumber.charAt(0);
+
+      $http.get('https://coursera-jhu-default-rtdb.firebaseio.com/menu_items/' + categoryShortName + '/menu_items/' + menuNumber + '.json')
+
+
+    </script>
+</head>
+<body>
+<button class="btn btn-warning btn-lg" ng-click="getMyInfo()">My Info</button>
+<button class="btn btn-danger btn-lg" ng-click="signUp()">Sign Up</button>
+<div ng-controller="SignUpController as signup">
+  <h3>Sign Up for Newsletter</h3>
+  <form name="signupForm" novalidate>
+    <div class="form-group">
+      <label for="firstName">First Name</label>
+      <input type="text" id="firstName" name="firstName" class="form-control" ng-model="signup.firstName" required>
+      <span class="error" ng-show="signupForm.firstName.$error.required && signupForm.firstName.$dirty">First Name is required</span>
+    </div>
+
+    <!-- Repeat the same pattern for last name, email address, and phone number -->
+
+    <div class="form-group">
+      <label for="favoriteMenu">Favorite Dish Menu Number</label>
+      <input type="text" id="favoriteMenu" name="favoriteMenu" class="form-control" ng-model="signup.favoriteMenu" required>
+      <span class="error" ng-show="signupForm.favoriteMenu.$error.required && signupForm.favoriteMenu.$dirty">Favorite Menu Number is required</span>
+      <span class="error" ng-show="signup.invalidMenuNumber">No such menu number exists</span>
+    </div>
+
+    <button type="submit" class="btn btn-primary" ng-disabled="signupForm.$invalid" ng-click="signup.submit()">Submit</button>
+  </form>
+
+  <div ng-show="signup.saved">
+    <p>Your information has been saved.</p>
+  </div>
+</div>
+</body>
+</html>
